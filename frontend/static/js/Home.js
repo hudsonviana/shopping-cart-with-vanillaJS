@@ -1,6 +1,8 @@
+import CartHelper from './helper/CartHelper.js';
 import ProductsHelper from './helper/ProductsHelper.js';
 import Product from './Product.js';
 
+let count = 0;
 export default class Home {
   constructor(selector) {
     this.container = document.getElementById(selector);
@@ -31,5 +33,27 @@ export default class Home {
 
     productsHtml += `</div>`;
     this.container.innerHTML += productsHtml;
+
+    if (count === 0) {
+      this.applyListeners();
+      count = 1;
+    }
+  }
+
+  applyListeners() {
+    document.addEventListener('click', ({ target }) => {
+      if (location.pathname === '/') {
+        let parent = target.parentNode.nodeName !== '#document' && target.parentNode.attributes['data-product-id'];
+        const productAttr = target.attributes['data-product-id'] || parent;
+
+        if (target.matches('.pd-card-btn') || target.parentNode.matches('.pd-card-btn') && productAttr !== undefined) {
+          const clickedProduct = this.products.find((item) => item.id === Number(productAttr.value));
+          CartHelper.addToCart(clickedProduct);
+        }
+      }
+    });
   }
 }
+
+// https://www.youtube.com/watch?v=s1DbX-k-oeI
+// Parei em 56:20
