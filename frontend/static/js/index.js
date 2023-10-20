@@ -1,3 +1,4 @@
+import Cart from './Cart.js';
 import Home from './Home.js';
 import CartHelper from './helper/CartHelper.js';
 
@@ -34,7 +35,7 @@ const generateNavbarHtml = (cartItemCount) => {
          </div>
       </a>
    </div>
-</nav>`;
+  </nav>`;
 };
 
 window.route = route;
@@ -52,6 +53,8 @@ const loadPage = () => {
 
   if (location.pathname === '/') {
     new Home('container');
+  } else if (location.pathname === '/cart') {
+    new Cart('container');
   }
 };
 
