@@ -1,3 +1,5 @@
+import CartHelper from './helper/CartHelper.js';
+
 export default class CartItem {
   constructor({ image, title, amount, id, price }) {
     this.image = image;
@@ -34,7 +36,7 @@ export default class CartItem {
         </button>
       </div>
 
-      <div class="total-price" id="${this.id}">$ ${this.price}</div>
+      <div class="total-price" id="price-${this.id}">$ ${CartHelper.getCartItemPrice(this.price, this.amount)}</div>
     </div>`;
   }
 }

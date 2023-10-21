@@ -67,6 +67,18 @@ export default class Cart {
           if (target.matches('.delete-btn') || target.parentNode.matches('.delete-btn')) {
             CartHelper.remove(id);
           }
+
+          // Increase the product amount
+          if (target.matches('.plus-btn') || target.parentNode.matches('.plus-btn')) {
+            this.cart = CartHelper.getCart;
+            const clickedProduct = this.cart.find((item) => item.id === id);
+            if (clickedProduct) CartHelper.addToCart(clickedProduct);
+          }
+
+          // Decrease the product amount
+          if (target.matches('.minus-btn') || target.parentNode.matches('.minus-btn')) {
+            CartHelper.removeItemFromCart(id);
+          }
         }
 
         // Remove shopping cart from the UI when cart is empty
