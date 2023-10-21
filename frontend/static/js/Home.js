@@ -56,4 +56,4 @@ export default class Home {
 }
 
 // https://www.youtube.com/watch?v=s1DbX-k-oeI
-// Parei em 56:20
+// Parei em 1:30:10

@@ -1,6 +1,8 @@
 import CartItem from './CartItem.js';
 import CartHelper from './helper/CartHelper.js';
 
+let count = 0;
+
 export default class Cart {
   constructor(selector) {
     this.container = document.getElementById(selector);
@@ -14,7 +16,7 @@ export default class Cart {
     <div id="sp-cart" class="shopping-cart container">
       <!-- Title -->
       <div class="title mt-5">
-        <h1>Total Price : <span id="cart-total-price">$2040 Total price here<span></h1>
+        <h1>Total Price : <span id="cart-total-price">$ ${CartHelper.calcTotalPrice()}<span></h1>
       </div>
       <div class="mb-5">
         <button class="btn btn-primary" id="clear-all">CLEAR ALL <i class="fa-sharp fa-solid fa-trash"></i></button>
@@ -37,5 +39,45 @@ export default class Cart {
 
     this.cartHtml += `</div></div>`;
     this.container.innerHTML += this.cartHtml;
+
+    if (count === 0) {
+      this.applyListeners();
+      count = 1;
+    }
+  }
+
+  applyListeners() {
+    document.addEventListener('click', (e) => {
+      const { target } = e;
+      let parent = target.parentNode.nodeName !== '#document' && target.parentNode.attributes['data-product-id'];
+      const productAttr = target.attributes['data-product-id'] || parent;
+
+      if (location.pathname === '/cart') {
+        // clear the shopping cart
+        if (target.matches('#clear-all') || target.parentNode.matches('#clear-all')) {
+          CartHelper.setCart = [];
+          this.cart = CartHelper.getCart;
+          CartHelper.updateNavCartValue = CartHelper.getCartItemCount;
+        }
+
+        if (productAttr && typeof productAttr.value !== undefined) {
+          let id = Number(productAttr.value);
+
+          // Remove the clicked item
+          if (target.matches('.delete-btn') || target.parentNode.matches('.delete-btn')) {
+            CartHelper.remove(id);
+          }
+        }
+
+        // Remove shopping cart from the UI when cart is empty
+        if (CartHelper.getCart.length <= 0) {
+          this.cart = CartHelper.getCart;
+          if (document.querySelector('.shopping-cart') !== null) {
+            document.querySelector('.shopping-cart').remove();
+            this.loadCart();
+          }
+        }
+      }
+    });
   }
 }

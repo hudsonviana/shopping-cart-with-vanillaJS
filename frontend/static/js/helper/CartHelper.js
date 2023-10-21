@@ -38,4 +38,21 @@ export default class CartHelper {
     const cart = document.querySelector('#nav-cart-item');
     cart.innerText = value;
   }
+
+  static calcTotalPrice() {
+    return this.getCart.reduce((ack, item) => item.amount * item.price + ack, 0).toFixed(2);
+  }
+
+  static remove(id) {
+    document.getElementById(`item-${id}`).remove();
+    this.setCart = this.getCart.filter((item) => item.id !== id);
+
+    // update the navbar cart
+    this.updateNavCartValue = this.getCartItemCount;
+    this.updateCartTotalPrice(this.calcTotalPrice());
+  }
+
+  static updateCartTotalPrice(totalPrice) {
+    document.querySelector('#cart-total-price').innerText = `$ ${totalPrice}`;
+  }
 }
